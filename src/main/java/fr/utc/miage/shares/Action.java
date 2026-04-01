@@ -58,7 +58,7 @@ public abstract class Action {
         hash = 53 * hash + Objects.hashCode(this.libelle);
         return hash;
     }
-
+ 
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
