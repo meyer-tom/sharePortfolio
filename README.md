@@ -1,9 +1,9 @@
 # Groupe
 - Tom Meyer (chef du groupe)
-- Alexi Fontanille
+- Alexi Fontanilles
 - Lois Pacqueteau
 - Selim Hamza
-- Tristan delthil
+- Tristan Delthil
 
 # Lien sonar
 https://sonarcloud.io/project/overview?id=meyer-tom_sharePortfolio
