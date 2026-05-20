@@ -26,6 +26,12 @@ public class Jour {
      * Year attribute.
      */
     private final int year;
+
+    /**
+     * Month attribute.
+     */
+    private final int month;
+
     /**
      * Day attribute.
      */
@@ -35,26 +41,24 @@ public class Jour {
      * Builds a Jour object from one year and one day.
      *
      * @param aYear the year of the jour &gt; 0
+     * @param aMonth the month of the jour &gt; 0
      * @param aDay  theday of the jour &gt; 0
      */
-    public Jour(final int aYear, final int aDay) {
+    public Jour(final int aDay, final int aMonth, final int aYear) {
         if (0 >= aDay) {
             throw new IllegalArgumentException("Day must be strictly more than 0");
         }
+
+        if (0 >= aMonth) {
+            throw new IllegalArgumentException("Month must be strictly more than 0");
+        }
+
         if (0 >= aYear) {
             throw new IllegalArgumentException("Year must be strictly more than 0");
         }
-        this.year = aYear;
         this.day = aDay;
-    }
-
-    /**
-     * Returns the year of the jour.
-     *
-     * @return the year property
-     */
-    public int getYear() {
-        return year;
+        this.month = aMonth;
+        this.year = aYear;
     }
 
     /**
@@ -66,12 +70,32 @@ public class Jour {
         return day;
     }
 
+    /**
+     * Returns the month of the jour.
+     *
+     * @return the month property
+     */
+    public int getMonth() {
+        return month;
+    }
+
+    /**
+     * Returns the year of the jour.
+     *
+     * @return the year property
+     */
+    public int getYear() {
+        return year;
+    }
+
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + year;
         result = prime * result + day;
+        result = prime * result + month;
+        result = prime * result + year;
         return result;
     }
 
@@ -87,12 +111,11 @@ public class Jour {
             return false;
         }
         Jour other = (Jour) obj;
-        return (year == other.year) && (day == other.day);
+        return (day == other.day) && (month == other.month) && (year == other.year);
     }
 
     @Override
     public String toString() {
-        return "Jour [year=" + year + ", day=" + day + "]";
+        return "" + day + "/" + month + "/" + year;
     }
-
 }
