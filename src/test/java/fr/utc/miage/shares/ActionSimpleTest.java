@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 Alexi Fontanilles et Lois Pacqueteau
+ * Copyright 2025 David Navarre &lt;David.Navarre at irit.fr&gt;.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,9 @@
  */
 package fr.utc.miage.shares;
 
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Assertions;
 
