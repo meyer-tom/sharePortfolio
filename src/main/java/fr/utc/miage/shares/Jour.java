@@ -38,7 +38,7 @@ public class Jour {
     private final int day;
 
     /**
-     * Builds a Jour object from one year and one day.
+     * Builds a Jour object from one day, month, and year.
      *
      * @param aYear the year of the jour &gt; 0
      * @param aMonth the month of the jour &gt; 0

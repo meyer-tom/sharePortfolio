@@ -26,7 +26,7 @@ public class Portefeuille {
     private final List<Action> actions;
 
     /**
-     * Créer un portfolio vide.
+     * Crée un portfolio vide.
      */
     public Portefeuille() {
         this.actions = List.of();
@@ -42,10 +42,10 @@ public class Portefeuille {
     }
 
     /**
-     * Retourne la valeur du portfolio pour une jour donnée.
+     * Retourne la valeur du portfolio pour un jour donné.
      *
-     * @param j la jour pour laquelle on veut la valeur du portfolio
-     * @return la valeur du portfolio pour la jour donnée
+     * @param j le jour pour lequel on veut la valeur du portfolio
+     * @return la valeur du portfolio pour le jour donné
      */
     public float valeurPortefeuille(Jour j) {
         float somme = 0;
