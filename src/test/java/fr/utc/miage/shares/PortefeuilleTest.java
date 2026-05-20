@@ -34,7 +34,7 @@ class PortefeuilleTest {
     @Test
     void newPortefeuilleHasNoActions() {
         Portefeuille portfolio = new Portefeuille();
-        Jour aujourdHui = new Jour(YEAR, MONTH, DAY);
+        Jour aujourdHui = new Jour(DAY, MONTH, YEAR);
 
         // Test nb actions
         assertEquals(0, portfolio.getActions().size());
