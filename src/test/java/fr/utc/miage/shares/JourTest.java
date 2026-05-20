@@ -112,7 +112,7 @@ class JourTest {
         final Jour jour1 = getDefaultJour();
         final Jour jour2 = new Jour(DEFAULT_DAY + 1, DEFAULT_MONTH + 1, DEFAULT_YEAR + 1);
 
-        assertNotEquals(jour1, jour2, "Objects Jour with different years and days should not be equals");
+        assertNotEquals(jour1, jour2, "Objects Jour with different days, months, and years should not be equals");
     }
 
     @Test
@@ -143,7 +143,7 @@ class JourTest {
     }
 
     /**
-     * Creates a Jour object with default year and day.
+     * Creates a Jour object with default day, month, and year.
      */
     private Jour getDefaultJour() {
         return new Jour(DEFAULT_DAY, DEFAULT_MONTH, DEFAULT_YEAR);
