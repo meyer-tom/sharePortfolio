@@ -28,7 +28,7 @@ class PortefeuilleTest {
 
     @Test
     void testPortefeuilleConstructorNoThrowsException() {
-        assertDoesNotThrow(PortefeuilleTest::new);
+        assertDoesNotThrow(Portefeuille::new);
     }
 
     @Test
