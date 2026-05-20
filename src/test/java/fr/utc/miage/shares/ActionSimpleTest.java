@@ -16,7 +16,7 @@
 package fr.utc.miage.shares;
 
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Assertions;
@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Test;
 class ActionSimpleTest {
 
     private static final String FOO_SHARE1 = "Foo Share 1";
-    private static final String FOO_SHARE2 = "Foo Share 2";
     private static final Jour JOUR_1 = new Jour(2026, 1);
     private static final int VALEUR = 10;
     private static final int VALEUR_0 = 0;
