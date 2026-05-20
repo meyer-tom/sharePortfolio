@@ -93,8 +93,8 @@ class ActionTest {
         }
 
         @Override
-        public float valeur(final Jour aJour) {
-            return 0.0F;
+        public double valeur(final Jour aJour) {
+            return 0.0;
         }
     }
 
