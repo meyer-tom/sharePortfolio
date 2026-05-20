@@ -24,22 +24,27 @@ import org.junit.jupiter.api.Test;
 
 class JourTest {
 
-    private static final int DEFAULT_YEAR = 1;
     private static final int DEFAULT_DAY = 1;
-    private static final int INVALID_YEAR = 0;
+    private static final int DEFAULT_MONTH = 1;
+    private static final int DEFAULT_YEAR = 1;
     private static final int INVALID_DAY = 0;
+    private static final int INVALID_MONTH = 0;
+    private static final int INVALID_YEAR = 0;
 
     @Test
     void testAllConstructorUsage() {
         Assertions.assertAll("Group of constructor tests",
                 () -> assertDoesNotThrow(() -> {
-                    new Jour(DEFAULT_YEAR, DEFAULT_DAY);
+                    new Jour(DEFAULT_DAY, DEFAULT_MONTH, DEFAULT_YEAR);
                 }),
                 () -> assertThrows(IllegalArgumentException.class, () -> {
-                    new Jour(DEFAULT_YEAR, INVALID_DAY);
+                    new Jour(INVALID_DAY, DEFAULT_MONTH, DEFAULT_YEAR);
                 }, "The day argument should be strictly more than 0"),
                 () -> assertThrows(IllegalArgumentException.class, () -> {
-                    new Jour(INVALID_YEAR, DEFAULT_DAY);
+                    new Jour(DEFAULT_DAY, INVALID_MONTH, DEFAULT_YEAR);
+                }, "The month argument should be strictly more than 0"),
+                () -> assertThrows(IllegalArgumentException.class, () -> {
+                    new Jour(DEFAULT_DAY, DEFAULT_MONTH, INVALID_YEAR);
                 }, "The year argument should be strictly more than 0")
         );
     }
@@ -49,9 +54,11 @@ class JourTest {
     void testAccessorShouldWork() {
         final Jour jour = getDefaultJour();
         final int resultDay = jour.getDay();
+        final int resultMonth = jour.getMonth();
         final int resultYear = jour.getYear();
         Assertions.assertAll("Grouped assertions on accessors",
                 () -> assertEquals(DEFAULT_DAY, resultDay, "Day should be the one used for creation"),
+                () -> assertEquals(DEFAULT_MONTH, resultMonth, "Month should be the one used for creation"),
                 () -> assertEquals(DEFAULT_YEAR, resultYear, "Year should be the one used for creation"));
     }
 
@@ -79,25 +86,33 @@ class JourTest {
     @Test
     void testNotEqualsWithDifferentDaysShouldWork() {
         final Jour jour1 = getDefaultJour();
-        final Jour jour2 = new Jour(DEFAULT_YEAR, DEFAULT_DAY + 1);
+        final Jour jour2 = new Jour(DEFAULT_DAY + 1, DEFAULT_MONTH, DEFAULT_YEAR);
 
         assertNotEquals(jour1, jour2, "Objects Jour with different days should not be equals");
     }
 
     @Test
+    void testNotEqualsWithDifferentMonthsShouldWork() {
+        final Jour jour1 = getDefaultJour();
+        final Jour jour2 = new Jour(DEFAULT_DAY, DEFAULT_MONTH + 1, DEFAULT_YEAR);
+
+        assertNotEquals(jour1, jour2, "Objects Jour with different months should not be equals");
+    }
+
+    @Test
     void testNotEqualsWithDifferentYearsShouldWork() {
         final Jour jour1 = getDefaultJour();
-        final Jour jour2 = new Jour(DEFAULT_YEAR + 1, DEFAULT_DAY);
+        final Jour jour2 = new Jour(DEFAULT_DAY, DEFAULT_MONTH, DEFAULT_YEAR + 1);
 
         assertNotEquals(jour1, jour2, "Objects Jour with different years should not be equals");
     }
 
     @Test
-    void testNotEqualsWithDifferentYearsAndDaysShouldWork() {
+    void testNotEqualsWithDifferentYearsAndMonthAndDaysShouldWork() {
         final Jour jour1 = getDefaultJour();
-        final Jour jour2 = new Jour(DEFAULT_YEAR + 1, DEFAULT_DAY + 1);
+        final Jour jour2 = new Jour(DEFAULT_DAY + 1, DEFAULT_MONTH + 1, DEFAULT_YEAR + 1);
 
-        assertNotEquals(jour1, jour2, "Objects Jour with different years and days should not be equals");
+        assertNotEquals(jour1, jour2, "Objects Jour with different days, months, and years should not be equals");
     }
 
     @Test
@@ -121,16 +136,16 @@ class JourTest {
         final Jour jour = getDefaultJour();
 
         final String result = jour.toString();
-        final String expected = "Jour [year=" + DEFAULT_YEAR + ", day=" + DEFAULT_DAY + "]";
+        final String expected = "" + DEFAULT_DAY + "/" + DEFAULT_MONTH + "/" + DEFAULT_YEAR;
 
         assertEquals(expected, result,
                 "ToString should be format as \"Jour [year=\" + year + \", day=\" + day + \"]\"");
     }
 
     /**
-     * Creates a Jour object with default year and day.
+     * Creates a Jour object with default day, month, and year.
      */
     private Jour getDefaultJour() {
-        return new Jour(DEFAULT_YEAR, DEFAULT_DAY);
+        return new Jour(DEFAULT_DAY, DEFAULT_MONTH, DEFAULT_YEAR);
     }
 }

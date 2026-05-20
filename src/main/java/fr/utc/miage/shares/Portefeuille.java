@@ -1,0 +1,57 @@
+/*
+ * Copyright 2026 Tom Meyer.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package fr.utc.miage.shares;
+
+import java.util.List;
+
+/**
+ * Cette classe représente un portfolio d'actions.
+ *
+ * @author Tom MEYER
+ */
+public class Portefeuille {
+    private final List<Action> actions;
+
+    /**
+     * Crée un portfolio vide.
+     */
+    public Portefeuille() {
+        this.actions = List.of();
+    }
+
+    /**
+     * Retourne la liste des actions du portfolio.
+     *
+     * @return la liste des actions du portfolio
+     */
+    public List<Action> getActions() {
+        return actions;
+    }
+
+    /**
+     * Retourne la valeur du portfolio pour un jour donné.
+     *
+     * @param j le jour pour lequel on veut la valeur du portfolio
+     * @return la valeur du portfolio pour le jour donné
+     */
+    public float valeurPortefeuille(Jour j) {
+        float somme = 0;
+        for (Action action : actions) {
+            somme += action.valeur(j);
+        }
+        return somme;
+    }
+}
