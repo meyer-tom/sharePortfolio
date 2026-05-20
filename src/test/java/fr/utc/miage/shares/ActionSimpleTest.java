@@ -27,7 +27,7 @@ class ActionSimpleTest {
 
     private static final String FOO_SHARE1 = "Foo Share 1";
     private static final String FOO_EMPTY = "";
-    private static final Jour JOUR_1 = new Jour(2026, 1);
+    private static final Jour JOUR_1 = new Jour(1,1,2026);
     private static final int VALEUR = 10;
     private static final int VALEUR_0 = 0;
 
