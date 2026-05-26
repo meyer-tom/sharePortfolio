@@ -1,19 +1,22 @@
 package fr.utc.miage.shares;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class ListActionsTest {
+class ListActionsTest {
 
     @Test
     void testListeNonVide() {
         ActionSimple a1 = new ActionSimple("Action 1");
         ActionSimple a2 = new ActionSimple("Action 2");
-        ListeActions liste = new ListeActions(List.of(a1, a2));
-        
+        ListeActions liste = new ListeActions(new ArrayList<>());
+        liste.ajouterAction(a1);
+        liste.ajouterAction(a2);
+
         Assertions.assertEquals(2, liste.getActions().size());
     }
 
@@ -35,12 +38,49 @@ public class ListActionsTest {
     }
 
     @Test
-
     void testToString() {
         ActionSimple a1 = new ActionSimple("Action 1");
         ListeActions liste = new ListeActions(List.of(a1));
         
         Assertions.assertNotNull(liste.toString());
     }
+
+    //test le setAction
+
+    @Test
+    void testSetActions() {
+        ActionSimple a1 = new ActionSimple("Action 1");
+        ActionSimple a2 = new ActionSimple("Action 2");
+        ListeActions liste = new ListeActions(List.of(a1));
+        
+        liste.setActions(List.of(a2));
+        
+        Assertions.assertEquals(1, liste.getActions().size());
+        Assertions.assertEquals("Action 2", liste.getActions().get(0).getLibelle());
+    }
+
+
+    @Test
+    void testAjouterAction() {
+        ActionSimple a1 = new ActionSimple("Action 1");
+        ListeActions liste = new ListeActions(new ArrayList<>());
+        
+        liste.ajouterAction(a1);
+        
+        Assertions.assertEquals(1, liste.getActions().size());
+        Assertions.assertEquals("Action 1", liste.getActions().get(0).getLibelle());
+    }
+
+    @Test
+    void testSupprimerAction() {
+        ActionSimple a1 = new ActionSimple("Action 1");
+        ListeActions liste = new ListeActions(new ArrayList<>());
+        liste.ajouterAction(a1);
+        
+        liste.supprimerAction(a1);
+        
+        Assertions.assertTrue(liste.getActions().isEmpty());
+    }
+
 
 }
