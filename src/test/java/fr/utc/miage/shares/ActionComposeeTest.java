@@ -29,8 +29,12 @@ class ActionComposeeTest {
     private static final String LIBELLE_NULL = null;
     private static final String LIBELLE_UN = "ActionComposeeTest1";
     private static final String LIBELLE_DEUX = "ActionComposeeTest2";
+    private static final String LIBELLE_TROIS = "ActionComposeeTest3";
     private static final double VALUE_UN = 50.0;
     private static final double VALUE_DEUX = 60.0;
+    private static final double VALUE_TROIS = 40.0;
+    private static final double VALUE_QUATRE = -20.0;
+    private static final double VALUE_CINQ = -10.0;
     private static final Jour JOUR_TEST = new Jour(1, 1, 2026);
 
     @Test
@@ -72,6 +76,26 @@ class ActionComposeeTest {
     }
 
     @Test
+    void testConstructorWithAdditionalPercentsInferiorTo100() {
+        Map<ActionSimple, Double> localComposition = new HashMap<>();
+        ActionSimple action1 = new ActionSimple(LIBELLE_UN);
+        ActionSimple action2 = new ActionSimple(LIBELLE_DEUX);
+        localComposition.put(action1, VALUE_UN);
+        localComposition.put(action2, VALUE_TROIS);
+        assertThrows(IllegalArgumentException.class, () -> new ActionComposee(LIBELLE_UN, localComposition));
+    }
+
+    @Test
+    void testConstructorWithNegativePercents() {
+        Map<ActionSimple, Double> localComposition = new HashMap<>();
+        ActionSimple action1 = new ActionSimple(LIBELLE_UN);
+        ActionSimple action2 = new ActionSimple(LIBELLE_DEUX);
+        localComposition.put(action1, VALUE_DEUX * 2);
+        localComposition.put(action2, VALUE_QUATRE);
+        assertThrows(IllegalArgumentException.class, () -> new ActionComposee(LIBELLE_UN, localComposition));
+    }
+
+    @Test
     void testValeurShouldWork() {
         Map<ActionSimple, Double> localComposition = new HashMap<>();
         ActionSimple action1 = new ActionSimple(LIBELLE_UN);
@@ -94,6 +118,97 @@ class ActionComposeeTest {
         ActionComposee actionComposee = new ActionComposee(LIBELLE_UN, localComposition);
 
         assertNotEquals(VALUE_UN, actionComposee.valeur(JOUR_TEST));
+    }
+
+    @Test
+    void testEditCompositionShouldWork() {
+        Map<ActionSimple, Double> localComposition = new HashMap<>();
+        ActionSimple action1 = new ActionSimple(LIBELLE_UN);
+        ActionSimple action2 = new ActionSimple(LIBELLE_DEUX);
+        localComposition.put(action1, VALUE_UN);
+        localComposition.put(action2, VALUE_UN);
+        ActionComposee actionComposee = new ActionComposee(LIBELLE_UN, localComposition);
+
+        Map<ActionSimple, Double> newComposition = new HashMap<>();
+        newComposition.put(action1, VALUE_DEUX);
+        newComposition.put(action2, VALUE_TROIS);
+
+        assertDoesNotThrow(() -> actionComposee.editComposition(newComposition));
+    }
+
+    @Test
+    void testEditCompositionShouldNotWorkWithNewCompositionNull() {
+        Map<ActionSimple, Double> localComposition = new HashMap<>();
+        ActionSimple action1 = new ActionSimple(LIBELLE_UN);
+        ActionSimple action2 = new ActionSimple(LIBELLE_DEUX);
+        localComposition.put(action1, VALUE_UN);
+        localComposition.put(action2, VALUE_UN);
+        ActionComposee actionComposee = new ActionComposee(LIBELLE_UN, localComposition);
+
+        assertThrows(NullPointerException.class, () -> actionComposee.editComposition(null));
+    }
+
+    @Test
+    void testEditCompositionShouldNotWorkWithNewCompositionEmpty() {
+        Map<ActionSimple, Double> localComposition = new HashMap<>();
+        ActionSimple action1 = new ActionSimple(LIBELLE_UN);
+        ActionSimple action2 = new ActionSimple(LIBELLE_DEUX);
+        localComposition.put(action1, VALUE_UN);
+        localComposition.put(action2, VALUE_UN);
+        ActionComposee actionComposee = new ActionComposee(LIBELLE_UN, localComposition);
+
+        Map<ActionSimple, Double> newComposition = new HashMap<>();
+
+        assertThrows(IllegalArgumentException.class, () -> actionComposee.editComposition(newComposition));
+    }
+
+    @Test
+    void testEditCompositionShouldNotWorkWithNewCompositionSumNot100() {
+        Map<ActionSimple, Double> localComposition = new HashMap<>();
+        ActionSimple action1 = new ActionSimple(LIBELLE_UN);
+        ActionSimple action2 = new ActionSimple(LIBELLE_DEUX);
+        localComposition.put(action1, VALUE_UN);
+        localComposition.put(action2, VALUE_UN);
+        ActionComposee actionComposee = new ActionComposee(LIBELLE_UN, localComposition);
+
+        Map<ActionSimple, Double> newComposition = new HashMap<>();
+        newComposition.put(action1, VALUE_DEUX); // 60.0
+        newComposition.put(action2, VALUE_DEUX); // 60.0
+
+        assertThrows(IllegalArgumentException.class, () -> actionComposee.editComposition(newComposition));
+    }
+
+    @Test
+    void testEditCompositionShouldNotWorkWithNewCompositionNegativePercents() {
+        Map<ActionSimple, Double> localComposition = new HashMap<>();
+        ActionSimple action1 = new ActionSimple(LIBELLE_UN);
+        ActionSimple action2 = new ActionSimple(LIBELLE_DEUX);
+        localComposition.put(action1, VALUE_UN);
+        localComposition.put(action2, VALUE_UN);
+        ActionComposee actionComposee = new ActionComposee(LIBELLE_UN, localComposition);
+
+        Map<ActionSimple, Double> newComposition = new HashMap<>();
+        newComposition.put(action1, VALUE_QUATRE); // -20.0
+        newComposition.put(action2, VALUE_CINQ); // -10.0
+
+        assertThrows(IllegalArgumentException.class, () -> actionComposee.editComposition(newComposition));
+    }
+
+    @Test
+    void testEditCompositionShouldNotWorkWithNewCompositionDifferentActions() {
+        Map<ActionSimple, Double> localComposition = new HashMap<>();
+        ActionSimple action1 = new ActionSimple(LIBELLE_UN);
+        ActionSimple action2 = new ActionSimple(LIBELLE_DEUX);
+        localComposition.put(action1, VALUE_UN);
+        localComposition.put(action2, VALUE_UN);
+        ActionComposee actionComposee = new ActionComposee(LIBELLE_UN, localComposition);
+
+        Map<ActionSimple, Double> newComposition = new HashMap<>();
+        ActionSimple action3 = new ActionSimple(LIBELLE_TROIS); // same label but different instance
+        newComposition.put(action1, VALUE_UN);
+        newComposition.put(action3, VALUE_UN);
+
+        assertThrows(IllegalArgumentException.class, () -> actionComposee.editComposition(newComposition));
     }
 
 }
