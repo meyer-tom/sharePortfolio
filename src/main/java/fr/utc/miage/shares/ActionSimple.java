@@ -34,15 +34,16 @@ public class ActionSimple extends Action {
     public ActionSimple(final String libelle) {
         // Action simple initialisée comme 1 action
         super(libelle);
+        if(libelle == null || libelle.equals("")){
+            throw new IllegalArgumentException("le libele est null");
+        }
         // init spécifique
         this.mapCours = new HashMap<>();
     }
 
     // enrg possible si pas de cours pour ce jour
     public void enrgCours(final Jour j, final double v) {
-        if (!this.mapCours.containsKey(j)) {
-            this.mapCours.put(j, v);
-        }
+        this.mapCours.putIfAbsent(j, v);
     }
 
     @Override
