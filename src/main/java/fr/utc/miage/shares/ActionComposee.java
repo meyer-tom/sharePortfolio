@@ -63,6 +63,43 @@ public class ActionComposee extends Action {
     }
 
     /**
+     * Edit the percentage of all the simple actions in the composition.
+     * The sum of the new percentages must be equal to 100.
+     * The new percentages must be positive.
+     * The simple actions in the new composition must be the same as those in the original composition.
+     * @param newComposition a map of simple actions and their corresponding new percentages in the composite action
+     * @throws NullPointerException if newComposition is null
+     * @throws IllegalArgumentException if newComposition is empty, if the sum of the new percentages is not 100, if any new percentage is negative, or if the simple actions in the
+     * new composition are not the same as those in the original composition
+     */
+    public void editComposition(final Map<ActionSimple, Double> newComposition) {
+        Objects.requireNonNull(newComposition, "La nouvelle composition ne peut pas être null");
+        if (newComposition.isEmpty()) {
+            throw new IllegalArgumentException("La nouvelle composition ne peut pas être vide");
+        }
+        double total = 0;
+        for (Double pct : newComposition.values()) {
+            if (pct < 0) {
+                throw new IllegalArgumentException("Les pourcentages doivent être positifs, trouvé: " + pct);
+            }
+            total += pct;
+        }
+        if (Math.abs(total - PERCENTAGE_TOTAL) > PERCENTAGE_TOLERANCE) {
+            throw new IllegalArgumentException(
+                "Les pourcentages doivent s'additionner à 100%, obtenu: " + total
+            );
+        }
+        if (!newComposition.keySet().equals(this.composition.keySet())) {
+            throw new IllegalArgumentException(
+                "Les actions simples de la nouvelle composition doivent être les mêmes que celles de la composition originale"
+            );
+        }
+        this.composition.clear();
+        this.composition.putAll(newComposition);
+    }
+
+
+    /**
      * Value of the composite action for a given day, calculated as the weighted sum of the values of the simple actions based on their respective percentages.
      *
      * @param j the day for which to calculate the value of the composite action
