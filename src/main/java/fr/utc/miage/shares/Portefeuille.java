@@ -45,7 +45,7 @@ public class Portefeuille {
 
     /**
      * Ajoute une certaine quantité d'une action au portefeuille.
-     * * @param action l'action à acheter
+     * @param action l'action à acheter
      * @param quantite la quantité à acheter (doit être > 0)
      * @throws NullPointerException si l'action est null
      * @throws IllegalArgumentException si la quantité est inférieure ou égale à 0
