@@ -90,8 +90,8 @@ class ActionComposeeTest {
         Map<ActionSimple, Double> localComposition = new HashMap<>();
         ActionSimple action1 = new ActionSimple(LIBELLE_UN);
         ActionSimple action2 = new ActionSimple(LIBELLE_DEUX);
-        localComposition.put(action1, VALUE_QUATRE);
-        localComposition.put(action2, VALUE_CINQ);
+        localComposition.put(action1, VALUE_DEUX * 2);
+        localComposition.put(action2, VALUE_QUATRE);
         assertThrows(IllegalArgumentException.class, () -> new ActionComposee(LIBELLE_UN, localComposition));
     }
 

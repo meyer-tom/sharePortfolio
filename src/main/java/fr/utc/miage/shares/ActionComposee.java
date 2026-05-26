@@ -48,6 +48,10 @@ public class ActionComposee extends Action {
             throw new IllegalArgumentException("La composition ne peut pas être vide");
         }
 
+        if (composition.values().stream().anyMatch(pct -> pct < 0)) {
+            throw new IllegalArgumentException("Les pourcentages doivent être non négatifs");
+        }
+
         double total = 0;
         for (Double pct : composition.values()) {
             total += pct;
@@ -65,7 +69,7 @@ public class ActionComposee extends Action {
     /**
      * Edit the percentage of all the simple actions in the composition.
      * The sum of the new percentages must be equal to 100.
-     * The new percentages must be positive.
+     * The new percentages must be non-negative.
      * The simple actions in the new composition must be the same as those in the original composition.
      * @param newComposition a map of simple actions and their corresponding new percentages in the composite action
      * @throws NullPointerException if newComposition is null
@@ -80,7 +84,7 @@ public class ActionComposee extends Action {
         double total = 0;
         for (Double pct : newComposition.values()) {
             if (pct < 0) {
-                throw new IllegalArgumentException("Les pourcentages doivent être positifs, trouvé: " + pct);
+                throw new IllegalArgumentException("Les pourcentages doivent être non négatifs, trouvé: " + pct);
             }
             total += pct;
         }
