@@ -25,10 +25,10 @@ import java.util.Map;
  */
 public class ActionSimple extends Action {
 
-    private static final int DEFAULT_ACTION_VALUE = 0;
+    private static final double DEFAULT_ACTION_VALUE = 0.0;
 
     // attribut lien
-    private final Map<Jour, Float> mapCours;
+    private final Map<Jour, Double> mapCours;
 
     // constructeur
     public ActionSimple(final String libelle) {
@@ -39,14 +39,14 @@ public class ActionSimple extends Action {
     }
 
     // enrg possible si pas de cours pour ce jour
-    public void enrgCours(final Jour j, final float v) {
+    public void enrgCours(final Jour j, final double v) {
         if (!this.mapCours.containsKey(j)) {
             this.mapCours.put(j, v);
         }
     }
 
     @Override
-    public float valeur(final Jour j) {
+    public double valeur(final Jour j) {
         if (this.mapCours.containsKey(j)) {
             return this.mapCours.get(j);
         } else {
