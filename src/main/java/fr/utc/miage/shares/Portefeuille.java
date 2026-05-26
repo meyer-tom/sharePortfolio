@@ -1,5 +1,5 @@
 /*
- * Copyright 2026 Tom Meyer.
+ * Copyright 2026 Tom Meyer/Selim Hamza.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
