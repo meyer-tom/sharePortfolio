@@ -35,7 +35,7 @@ class ActionComposeeTest {
 
     @Test
     void testConstructorWithValidComposition() {
-        
+
         ActionSimple action1 = new ActionSimple(LIBELLE_UN);
         ActionSimple action2 = new ActionSimple(LIBELLE_DEUX);
         Map<ActionSimple, Double> localComposition = new HashMap<>();
@@ -66,13 +66,13 @@ class ActionComposeeTest {
         Map<ActionSimple, Double> localComposition = new HashMap<>();
         ActionSimple action1 = new ActionSimple(LIBELLE_UN);
         ActionSimple action2 = new ActionSimple(LIBELLE_DEUX);
-        localComposition.put(action1, 60.0);
-        localComposition.put(action2, 50.0);
+        localComposition.put(action1, VALUE_UN);
+        localComposition.put(action2, VALUE_DEUX); // 50.0 + 60.0 = 110.0 > 100.0
         assertThrows(IllegalArgumentException.class, () -> new ActionComposee(LIBELLE_UN, localComposition));
     }
 
     @Test
-    void testValeurShouldWork(){
+    void testValeurShouldWork() {
         Map<ActionSimple, Double> localComposition = new HashMap<>();
         ActionSimple action1 = new ActionSimple(LIBELLE_UN);
         ActionSimple action2 = new ActionSimple(LIBELLE_DEUX);
@@ -88,11 +88,12 @@ class ActionComposeeTest {
         Map<ActionSimple, Double> localComposition = new HashMap<>();
         ActionSimple action1 = new ActionSimple(LIBELLE_UN);
         ActionSimple action2 = new ActionSimple(LIBELLE_DEUX);
-        localComposition.put(action1, VALUE_UN);  // 50.0
-        localComposition.put(action2, VALUE_UN);  // 50.0
+        localComposition.put(action1, VALUE_UN); // 50.0
+        localComposition.put(action2, VALUE_UN); // 50.0
 
         ActionComposee actionComposee = new ActionComposee(LIBELLE_UN, localComposition);
 
         assertNotEquals(VALUE_UN, actionComposee.valeur(JOUR_TEST));
     }
+
 }
