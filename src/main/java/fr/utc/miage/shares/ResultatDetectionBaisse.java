@@ -20,7 +20,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Résultat de la détection des actions en baisse dans un portefeuille entre deux jours.
+ * Résultat de la détection des actions en baisse dans un portefeuille entre
+ * deux jours.
  *
  * @author Tom MEYER
  */
@@ -32,8 +33,10 @@ public class ResultatDetectionBaisse {
     /**
      * Construit un résultat de détection de baisse.
      *
-     * @param actionsEnBaisse map associant chaque action en baisse à sa variation (valeur négative)
-     * @param donneesManquantes liste des actions dont les données sont absentes pour l'un des jours
+     * @param actionsEnBaisse   map associant chaque action en baisse à sa variation
+     *                          (valeur négative)
+     * @param donneesManquantes liste des actions dont les données sont absentes
+     *                          pour l'un des jours
      */
     public ResultatDetectionBaisse(final Map<Action, Double> actionsEnBaisse,
             final List<Action> donneesManquantes) {
@@ -44,7 +47,7 @@ public class ResultatDetectionBaisse {
     /**
      * Retourne les actions en baisse avec leur variation (valeur négative).
      *
-     * @return map action → variation
+     * @return map action variation
      */
     public Map<Action, Double> getActionsEnBaisse() {
         return actionsEnBaisse;

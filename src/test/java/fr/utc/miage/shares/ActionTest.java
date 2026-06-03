@@ -96,6 +96,11 @@ class ActionTest {
         public double valeur(final Jour aJour) {
             return 0.0;
         }
+
+        @Override
+        public boolean hasCours(final Jour aJour) {
+            return false;
+        }
     }
 
 }
