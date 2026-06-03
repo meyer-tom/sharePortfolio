@@ -56,34 +56,45 @@ class PortefeuilleTest {
         Portefeuille portfolio = new Portefeuille();
         ActionSimple action = new ActionSimple(ACTION_1_NAME);
 
-        assertAll("Vérification des quantités invalides à l'achat",
-                () -> assertThrows(IllegalArgumentException.class, () -> portfolio.acheter(action, 0)),
-                () -> assertThrows(IllegalArgumentException.class, () -> portfolio.acheter(action, -5)));
+        IllegalArgumentException exceptionZero = assertThrows(
+                IllegalArgumentException.class,
+                () -> portfolio.acheter(action, 0));
+        assertEquals("La quantité à acheter doit être strictement positive", exceptionZero.getMessage());
+
+        IllegalArgumentException exceptionNegative = assertThrows(
+                IllegalArgumentException.class,
+                () -> portfolio.acheter(action, -3));
+        assertEquals("La quantité à acheter doit être strictement positive", exceptionNegative.getMessage());
     }
 
     @Test
     void testAcheterWithValidParametersShouldAddAction() {
         Portefeuille portfolio = new Portefeuille();
-        ActionSimple action = new ActionSimple(ACTION_1_NAME);
+        ActionSimple action1 = new ActionSimple(ACTION_1_NAME);
+        ActionSimple action2 = new ActionSimple(ACTION_2_NAME);
 
-        portfolio.acheter(action, 10);
+        portfolio.acheter(action1, 5);
 
-        Map<Action, Integer> actions = portfolio.getActions();
-        assertAll("Vérification de l'ajout d'une action",
-                () -> assertEquals(1, actions.size(), "Le portefeuille doit contenir 1 action"),
-                () -> assertTrue(actions.containsKey(action), "Le portefeuille doit contenir l'action achetée"),
-                () -> assertEquals(10, actions.get(action), "La quantité de l'action doit être 10"));
+        assertEquals(5, portfolio.getActions().get(action1), "Le portefeuille doit contenir 5 pour l'action achetée");
+
+        portfolio.acheter(action2, 10);
+        assertEquals(10, portfolio.getActions().get(action2),
+                "Le portefeuille doit contenir 10 pour la seconde action achetée");
     }
 
     @Test
     void testAcheterExistingActionShouldIncrementQuantity() {
         Portefeuille portfolio = new Portefeuille();
-        ActionSimple action = new ActionSimple(ACTION_1_NAME);
+        ActionSimple action1 = new ActionSimple(ACTION_1_NAME);
+        ActionSimple action2 = new ActionSimple(ACTION_2_NAME);
 
-        portfolio.acheter(action, 10);
-        portfolio.acheter(action, 5);
+        portfolio.acheter(action1, 10);
+        portfolio.acheter(action1, 5);
+        assertEquals(15, portfolio.getActions().get(action1), "La quantité totale doit être incrémentée (10 + 5 = 15)");
 
-        assertEquals(15, portfolio.getActions().get(action), "La quantité totale doit être incrémentée (10 + 5 = 15)");
+        portfolio.acheter(action2, 3);
+        portfolio.acheter(action2, 7);
+        assertEquals(10, portfolio.getActions().get(action2), "La quantité totale doit être incrémentée (3 + 7 = 10)");
     }
 
     @Test
@@ -267,7 +278,7 @@ class PortefeuilleTest {
                 () -> assertFalse(resultat.getActionsEnBaisse().containsKey(actionD)),
                 () -> assertTrue(resultat.getDonneesManquantes().contains(actionD)));
     }
-    
+
     void testGetActionsOnNonEmptyPortefeuilleShouldReturnMapWithActions() {
         Portefeuille portfolio = new Portefeuille();
         ActionSimple action1 = new ActionSimple(ACTION_1_NAME);
@@ -283,5 +294,27 @@ class PortefeuilleTest {
                 () -> assertTrue(actions.containsKey(action2), "Le portefeuille doit contenir l'action 2"),
                 () -> assertEquals(10, actions.get(action1), "La quantité de l'action 1 doit être 10"),
                 () -> assertEquals(5, actions.get(action2), "La quantité de l'action 2 doit être 5"));
+    }
+
+    @Test
+    void testAcheterMultipleDifferentActionsShouldStoreAllCorrectly() {
+
+        Portefeuille portfolio = new Portefeuille();
+        ActionSimple action1 = new ActionSimple("A1");
+        ActionSimple action2 = new ActionSimple("A2");
+        ActionSimple action3 = new ActionSimple("A3");
+
+        portfolio.acheter(action1, 10);
+        portfolio.acheter(action2, 4);
+        portfolio.acheter(action3, 13);
+
+        Map<Action, Integer> actions = portfolio.getActions();
+
+        assertAll("Vérification du portefeuille avec plusieurs actions différentes",
+                () -> assertEquals(3, actions.size(),
+                        "Le portefeuille doit contenir bien 3 lignes (actions différentes)"),
+                () -> assertEquals(10, actions.get(action1), "La quantité pour A1 doit être de 10"),
+                () -> assertEquals(4, actions.get(action2), "La quantité pour A2 doit être de 4"),
+                () -> assertEquals(13, actions.get(action3), "La quantité pour A3 doit être de 13"));
     }
 }
