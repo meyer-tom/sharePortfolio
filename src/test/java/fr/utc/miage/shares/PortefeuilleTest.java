@@ -190,7 +190,7 @@ class PortefeuilleTest {
     }
 
     @Test
-    void testPortefeuilleShouldHaveActions() {
+    void testGetActionsOnNonEmptyPortefeuilleShouldReturnMapWithActions() {
         Portefeuille portfolio = new Portefeuille();
         ActionSimple action1 = new ActionSimple(ACTION_1_NAME);
         ActionSimple action2 = new ActionSimple(ACTION_2_NAME);
