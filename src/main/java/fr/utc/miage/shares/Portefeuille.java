@@ -107,6 +107,45 @@ public class Portefeuille {
     }
 
     /**
+     * Détecte les actions du portefeuille dont la variation de cours dépasse un seuil défini
+     * entre deux jours consécutifs. La variation est calculée en valeur absolue : une hausse
+     * ou une baisse dépassant le seuil génère une alerte.
+     *
+     * @param j1                le jour de référence initial
+     * @param j2                le jour de comparaison
+     * @param seuilPourcentage  le seuil de variation en pourcentage (ex. 10.0 pour 10%)
+     * @return le résultat contenant les actions en alerte et les éventuelles données manquantes
+     * @throws NullPointerException     si j1 ou j2 est null
+     * @throws IllegalArgumentException si le seuil est négatif
+     */
+    public ResultatAlerteVariation detecterVariationsBrutales(final Jour j1, final Jour j2,
+            final double seuilPourcentage) {
+        Objects.requireNonNull(j1, "Le jour j1 ne peut pas être null");
+        Objects.requireNonNull(j2, "Le jour j2 ne peut pas être null");
+        if (seuilPourcentage < 0) {
+            throw new IllegalArgumentException("Le seuil de variation doit être positif ou nul");
+        }
+
+        Map<Action, Double> actionsEnAlerte = new HashMap<>();
+        List<Action> donneesManquantes = new ArrayList<>();
+
+        for (Action action : actions.keySet()) {
+            if (!action.hasCours(j1) || !action.hasCours(j2)) {
+                donneesManquantes.add(action);
+            } else {
+                double v1 = action.valeur(j1);
+                double v2 = action.valeur(j2);
+                double variationPct = Math.abs((v2 - v1) / v1) * 100.0;
+                if (variationPct >= seuilPourcentage) {
+                    actionsEnAlerte.put(action, variationPct);
+                }
+            }
+        }
+
+        return new ResultatAlerteVariation(actionsEnAlerte, donneesManquantes);
+    }
+
+    /**
      * Détecte les actions du portefeuille dont le cours a baissé entre deux jours donnés.
      * Les actions dont les données sont absentes pour l'un des jours sont exclues du calcul
      * et signalées dans le résultat.
