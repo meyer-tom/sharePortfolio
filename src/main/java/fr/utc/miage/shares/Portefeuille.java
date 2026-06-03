@@ -15,7 +15,9 @@
  */
 package fr.utc.miage.shares;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -86,7 +88,7 @@ public class Portefeuille {
     }
 
     /**
-     * Retourne la valeur totale du portefeuille pour un jour donné, 
+     * Retourne la valeur totale du portefeuille pour un jour donné,
      * calculée en fonction des quantités détenues.
      *
      * @param j le jour pour lequel on veut la valeur du portefeuille
@@ -94,11 +96,43 @@ public class Portefeuille {
      */
     public float valeurPortefeuille(final Jour j) {
         Objects.requireNonNull(j, "Le jour ne peut pas être null");
-        
+
         float somme = 0;
         for (Map.Entry<Action, Integer> entry : actions.entrySet()) {
             somme += entry.getKey().valeur(j) * entry.getValue();
         }
         return somme;
+    }
+
+    /**
+     * Détecte les actions du portefeuille dont le cours a baissé entre deux jours donnés.
+     * Les actions dont les données sont absentes pour l'un des jours sont exclues du calcul
+     * et signalées dans le résultat.
+     *
+     * @param j1 le jour de référence initial
+     * @param j2 le jour de comparaison
+     * @return le résultat contenant les actions en baisse et les éventuelles données manquantes
+     * @throws NullPointerException si j1 ou j2 est null
+     */
+    public ResultatDetectionBaisse detecterActionsEnBaisse(final Jour j1, final Jour j2) {
+        Objects.requireNonNull(j1, "Le jour j1 ne peut pas être null");
+        Objects.requireNonNull(j2, "Le jour j2 ne peut pas être null");
+
+        Map<Action, Double> actionsEnBaisse = new HashMap<>();
+        List<Action> donneesManquantes = new ArrayList<>();
+
+        for (Action action : actions.keySet()) {
+            if (!action.hasCours(j1) || !action.hasCours(j2)) {
+                donneesManquantes.add(action);
+            } else {
+                double v1 = action.valeur(j1);
+                double v2 = action.valeur(j2);
+                if (v2 < v1) {
+                    actionsEnBaisse.put(action, v2 - v1);
+                }
+            }
+        }
+
+        return new ResultatDetectionBaisse(actionsEnBaisse, donneesManquantes);
     }
 }

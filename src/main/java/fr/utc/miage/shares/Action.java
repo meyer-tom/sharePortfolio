@@ -52,6 +52,14 @@ public abstract class Action {
      */
     public abstract double valeur(Jour j);
 
+    /**
+     * Indique si un cours est disponible pour le jour donné.
+     *
+     * @param j le jour à vérifier
+     * @return true si un cours existe pour ce jour, false sinon
+     */
+    public abstract boolean hasCours(Jour j);
+
     @Override
     public int hashCode() {
         int hash = 3;
