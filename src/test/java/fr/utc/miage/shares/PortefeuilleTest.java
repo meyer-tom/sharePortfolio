@@ -209,18 +209,16 @@ class PortefeuilleTest {
 
     @Test
     void testAcheterMultipleDifferentActionsShouldStoreAllCorrectly() {
-        // Given : Etant donné un portefeuille vide et plusieurs actions existent
+
         Portefeuille portfolio = new Portefeuille();
         ActionSimple action1 = new ActionSimple("A1");
         ActionSimple action2 = new ActionSimple("A2");
         ActionSimple action3 = new ActionSimple("A3");
 
-        // When : Lorsque j'achète des quantités différentes de chacune de ces actions
         portfolio.acheter(action1, 10);
         portfolio.acheter(action2, 4);
         portfolio.acheter(action3, 13);
 
-        // Then : Alors le portefeuille contient bien toutes ces actions avec leurs quantités respectives
         Map<Action, Integer> actions = portfolio.getActions();
         
         assertAll("Vérification du portefeuille avec plusieurs actions différentes",
