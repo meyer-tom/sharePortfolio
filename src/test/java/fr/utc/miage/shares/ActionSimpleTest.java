@@ -17,13 +17,11 @@ package fr.utc.miage.shares;
 
 
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 class ActionSimpleTest {
@@ -87,11 +85,34 @@ class ActionSimpleTest {
     @Test
     void testActionSimpleCouldBeDeleted() {
         final ActionSimple action = new ActionSimple(FOO_SHARE1);
-        final List<Action> actions = new ArrayList<>();
+        final List<Action> actions = new ArrayList<>();
+
         actions.add(action);
         final ListeActions liste = new ListeActions(actions);
 
-        liste.supprimerAction(action);
-        Assertions.assertFalse(liste.getActions().contains(action));
+        liste.supprimerAction(action);
+
+        Assertions.assertFalse(liste.getActions().contains(action));
+
     }
+
+    //Suppression d'une action utilisée dans un portefeuille
+    @Test
+    void testActionSimpleCouldNotBeDeleted() {
+        final ActionSimple action = new ActionSimple(FOO_SHARE1);
+        final List<Action> actions = new ArrayList<>();
+
+        actions.add(action);
+        final ListeActions liste = new ListeActions(actions);
+
+        final Portefeuille portefeuille = new Portefeuille();
+
+        portefeuille.acheter(action, VALEUR);
+        Assertions.assertThrows(IllegalStateException.class, () -> {
+            liste.supprimerAction(action);
+        });
+
+    }
+
+
 }
