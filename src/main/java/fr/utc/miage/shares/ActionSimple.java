@@ -64,9 +64,4 @@ public class ActionSimple extends Action {
             return DEFAULT_ACTION_VALUE;
         }
     }
-
-    @Override
-    public boolean hasCours(final Jour j) {
-        return this.mapCours.containsKey(j);
-    }
 }
