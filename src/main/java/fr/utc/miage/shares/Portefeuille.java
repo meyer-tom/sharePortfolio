@@ -61,10 +61,11 @@ public class Portefeuille {
 
     /**
      * Retire une certaine quantité d'une action du portefeuille.
-     * * @param action l'action à vendre
-     * @param quantite la quantité à vendre (doit être > 0)
+     *
+     * @param action l'action à vendre
+     * @param quantite la quantité à vendre (doit être &gt; 0)
      * @throws NullPointerException si l'action est null
-     * @throws IllegalArgumentException si la quantité est <= 0 ou supérieure à la quantité détenue
+     * @throws IllegalArgumentException si la quantité est &lt;= 0 ou supérieure à la quantité détenue
      */
     public void vendre(final Action action, final int quantite) {
         Objects.requireNonNull(action, "L'action ne peut pas être null");
