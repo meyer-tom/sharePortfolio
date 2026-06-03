@@ -87,12 +87,11 @@ class ActionSimpleTest {
     @Test
     void testActionSimpleCouldBeDeleted() {
         final ActionSimple action = new ActionSimple(FOO_SHARE1);
-        List<Action> actions = new ArrayList<Action>();
+        final List<Action> actions = new ArrayList<>();
         actions.add(action);
         final ListeActions liste = new ListeActions(actions);
 
-        Assertions.assertDoesNotThrow(() -> {
-            liste.supprimerAction(action);
-        });
+        liste.supprimerAction(action);
+        Assertions.assertFalse(liste.getActions().contains(action));
     }
 }
