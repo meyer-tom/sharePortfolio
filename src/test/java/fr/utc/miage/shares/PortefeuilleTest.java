@@ -120,8 +120,11 @@ class PortefeuilleTest {
         ActionSimple action = new ActionSimple(ACTION_1_NAME);
         portfolio.acheter(action, 10);
 
-        assertThrows(IllegalArgumentException.class, () -> portfolio.vendre(action, 15),
-                "La vente d'une quantité supérieure à la quantité détenue doit lever une exception");
+         IllegalArgumentException exception = assertThrows(
+            IllegalArgumentException.class, 
+            () -> portfolio.vendre(action, 15)
+        );
+        assertEquals("Quantité insuffisante dans le portefeuille pour effectuer la vente", exception.getMessage());
     }
 
     @Test
