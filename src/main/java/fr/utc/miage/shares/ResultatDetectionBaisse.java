@@ -40,8 +40,10 @@ public class ResultatDetectionBaisse {
      */
     public ResultatDetectionBaisse(final Map<Action, Double> actionsEnBaisse,
             final List<Action> donneesManquantes) {
-        this.actionsEnBaisse = Collections.unmodifiableMap(actionsEnBaisse);
-        this.donneesManquantes = Collections.unmodifiableList(donneesManquantes);
+        this.actionsEnBaisse = Collections.unmodifiableMap(
+                new java.util.HashMap<>(java.util.Objects.requireNonNull(actionsEnBaisse, "actionsEnBaisse")));
+        this.donneesManquantes = Collections.unmodifiableList(
+                new java.util.ArrayList<>(java.util.Objects.requireNonNull(donneesManquantes, "donneesManquantes")));
     }
 
     /**

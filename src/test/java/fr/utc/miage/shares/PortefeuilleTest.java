@@ -279,6 +279,7 @@ class PortefeuilleTest {
                 () -> assertTrue(resultat.getDonneesManquantes().contains(actionD)));
     }
 
+    @Test
     void testGetActionsOnNonEmptyPortefeuilleShouldReturnMapWithActions() {
         Portefeuille portfolio = new Portefeuille();
         ActionSimple action1 = new ActionSimple(ACTION_1_NAME);
