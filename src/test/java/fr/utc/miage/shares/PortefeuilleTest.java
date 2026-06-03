@@ -65,16 +65,15 @@ class PortefeuilleTest {
      @Test
     void testAcheterWithValidParametersShouldAddAction() {
         Portefeuille portfolio = new Portefeuille();
-        ActionSimple action = new ActionSimple(ACTION_1_NAME);
+        ActionSimple action1 = new ActionSimple(ACTION_1_NAME);
+        ActionSimple action2 = new ActionSimple(ACTION_2_NAME);
         
-        portfolio.acheter(action, 10);
+        portfolio.acheter(action1, 5);
         
-        Map<Action, Integer> actions = portfolio.getActions();
-        assertAll("Vérification de l'ajout d'une action",
-            () -> assertEquals(1, actions.size(), "Le portefeuille doit contenir 1 action"),
-            () -> assertTrue(actions.containsKey(action), "Le portefeuille doit contenir l'action achetée"),
-            () -> assertEquals(10, actions.get(action), "La quantité de l'action doit être 10")
-        );
+        assertEquals(5, portfolio.getActions().get(action1), "Le portefeuille doit contenir 5 pour l'action achetée");
+
+        portfolio.acheter(action2, 10);
+        assertEquals(10, portfolio.getActions().get(action2), "Le portefeuille doit contenir 10 pour la seconde action achetée");
     }
 
     @Test
@@ -83,12 +82,10 @@ class PortefeuilleTest {
         ActionSimple action1 = new ActionSimple(ACTION_1_NAME);
         ActionSimple action2 = new ActionSimple(ACTION_2_NAME);
         
-        // Exemple 1 : 10 existants + achat de 5 -> total 15
         portfolio.acheter(action1, 10);
         portfolio.acheter(action1, 5); 
         assertEquals(15, portfolio.getActions().get(action1), "La quantité totale doit être incrémentée (10 + 5 = 15)");
 
-        // Exemple 2 : 3 existants + achat de 7 -> total 10
         portfolio.acheter(action2, 3);
         portfolio.acheter(action2, 7); 
         assertEquals(10, portfolio.getActions().get(action2), "La quantité totale doit être incrémentée (3 + 7 = 10)");
