@@ -1,5 +1,5 @@
 /*
- * Copyright 2026 Tom Meyer.
+ * Copyright 2026 Tom Meyer/Selim Hamza.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,9 @@
  */
 package fr.utc.miage.shares;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Cette classe représente un portfolio d'actions.
@@ -23,34 +25,78 @@ import java.util.List;
  * @author Tom MEYER
  */
 public class Portefeuille {
-    private final List<Action> actions;
+    private final Map<Action, Integer> actions;
 
     /**
      * Crée un portfolio vide.
      */
     public Portefeuille() {
-        this.actions = List.of();
+        this.actions = new HashMap<>();
     }
 
     /**
-     * Retourne la liste des actions du portfolio.
+     * Retourne une copie de la composition du portefeuille (actions et quantités).
      *
-     * @return la liste des actions du portfolio
+     * @return une map contenant les actions et leurs quantités respectives
      */
-    public List<Action> getActions() {
-        return actions;
+    public Map<Action, Integer> getActions() {
+        return new HashMap<>(actions);
     }
 
     /**
-     * Retourne la valeur du portfolio pour un jour donné.
-     *
-     * @param j le jour pour lequel on veut la valeur du portfolio
-     * @return la valeur du portfolio pour le jour donné
+     * Ajoute une certaine quantité d'une action au portefeuille.
+     * @param action l'action à acheter
+     * @param quantite la quantité à acheter (doit être > 0)
+     * @throws NullPointerException si l'action est null
+     * @throws IllegalArgumentException si la quantité est inférieure ou égale à 0
      */
-    public float valeurPortefeuille(Jour j) {
+    public void acheter(final Action action, final int quantite) {
+        Objects.requireNonNull(action, "L'action ne peut pas être null");
+        if (quantite <= 0) {
+            throw new IllegalArgumentException("La quantité à acheter doit être strictement positive");
+        }
+        
+        this.actions.put(action, this.actions.getOrDefault(action, 0) + quantite);
+    }
+
+    /**
+     * Retire une certaine quantité d'une action du portefeuille.
+     * * @param action l'action à vendre
+     * @param quantite la quantité à vendre (doit être > 0)
+     * @throws NullPointerException si l'action est null
+     * @throws IllegalArgumentException si la quantité est <= 0 ou supérieure à la quantité détenue
+     */
+    public void vendre(final Action action, final int quantite) {
+        Objects.requireNonNull(action, "L'action ne peut pas être null");
+        if (quantite <= 0) {
+            throw new IllegalArgumentException("La quantité à vendre doit être strictement positive");
+        }
+        
+        int quantiteActuelle = this.actions.getOrDefault(action, 0);
+        if (quantiteActuelle < quantite) {
+            throw new IllegalArgumentException("Quantité insuffisante dans le portefeuille pour effectuer la vente");
+        }
+        
+        if (quantiteActuelle == quantite) {
+            this.actions.remove(action);
+        } else {
+            this.actions.put(action, quantiteActuelle - quantite);
+        }
+    }
+
+    /**
+     * Retourne la valeur totale du portefeuille pour un jour donné, 
+     * calculée en fonction des quantités détenues.
+     *
+     * @param j le jour pour lequel on veut la valeur du portefeuille
+     * @return la valeur totale du portefeuille pour le jour donné
+     */
+    public float valeurPortefeuille(final Jour j) {
+        Objects.requireNonNull(j, "Le jour ne peut pas être null");
+        
         float somme = 0;
-        for (Action action : actions) {
-            somme += action.valeur(j);
+        for (Map.Entry<Action, Integer> entry : actions.entrySet()) {
+            somme += entry.getKey().valeur(j) * entry.getValue();
         }
         return somme;
     }
