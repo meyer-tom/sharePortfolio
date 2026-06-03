@@ -19,6 +19,9 @@ package fr.utc.miage.shares;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 
 import org.junit.jupiter.api.Test;
@@ -79,5 +82,16 @@ class ActionSimpleTest {
         Assertions.assertDoesNotThrow(() -> {
             action.enrgCours(JOUR_1, VALEUR_0);
         });
+    }
+
+    @Test
+    void testActionSimpleCouldBeDeleted() {
+        final ActionSimple action = new ActionSimple(FOO_SHARE1);
+        final List<Action> actions = new ArrayList<>();
+        actions.add(action);
+        final ListeActions liste = new ListeActions(actions);
+
+        liste.supprimerAction(action);
+        Assertions.assertFalse(liste.getActions().contains(action));
     }
 }
