@@ -80,12 +80,18 @@ class PortefeuilleTest {
     @Test
     void testAcheterExistingActionShouldIncrementQuantity() {
         Portefeuille portfolio = new Portefeuille();
-        ActionSimple action = new ActionSimple(ACTION_1_NAME);
+        ActionSimple action1 = new ActionSimple(ACTION_1_NAME);
+        ActionSimple action2 = new ActionSimple(ACTION_2_NAME);
         
-        portfolio.acheter(action, 10);
-        portfolio.acheter(action, 5); 
-        
-        assertEquals(15, portfolio.getActions().get(action), "La quantité totale doit être incrémentée (10 + 5 = 15)");
+        // Exemple 1 : 10 existants + achat de 5 -> total 15
+        portfolio.acheter(action1, 10);
+        portfolio.acheter(action1, 5); 
+        assertEquals(15, portfolio.getActions().get(action1), "La quantité totale doit être incrémentée (10 + 5 = 15)");
+
+        // Exemple 2 : 3 existants + achat de 7 -> total 10
+        portfolio.acheter(action2, 3);
+        portfolio.acheter(action2, 7); 
+        assertEquals(10, portfolio.getActions().get(action2), "La quantité totale doit être incrémentée (3 + 7 = 10)");
     }
 
     // --- Tests pour la méthode vendre ---
