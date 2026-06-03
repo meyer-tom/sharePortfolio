@@ -322,4 +322,131 @@ class PortefeuilleTest {
                 () -> assertFalse(resultat.getActionsEnAlerte().containsKey(actionC),
                         "Aucune alerte pour l'action C (variation 4%)"));
     }
+
+    @Test
+    void testDetecterVariationsBrutalesAvecJ1NullLeveException() {
+        Portefeuille portfolio = new Portefeuille();
+        assertThrows(NullPointerException.class,
+                () -> portfolio.detecterVariationsBrutales(null, JOUR_2, 10.0));
+    }
+
+    @Test
+    void testDetecterVariationsBrutalesAvecJ2NullLeveException() {
+        Portefeuille portfolio = new Portefeuille();
+        assertThrows(NullPointerException.class,
+                () -> portfolio.detecterVariationsBrutales(JOUR_1, null, 10.0));
+    }
+
+    @Test
+    void testDetecterVariationsBrutalesAvecSeuilNegatifLeveException() {
+        Portefeuille portfolio = new Portefeuille();
+        assertThrows(IllegalArgumentException.class,
+                () -> portfolio.detecterVariationsBrutales(JOUR_1, JOUR_2, -1.0));
+    }
+
+    @Test
+    void testDetecterVariationsBrutalesActionSansCoursEnDonneesManquantes() {
+        Portefeuille portfolio = new Portefeuille();
+        ActionSimple actionSansCours = new ActionSimple("Sans cours");
+        portfolio.acheter(actionSansCours, 1);
+
+        ResultatAlerteVariation resultat = portfolio.detecterVariationsBrutales(JOUR_1, JOUR_2, 10.0);
+
+        assertAll(
+                () -> assertTrue(resultat.getDonneesManquantes().contains(actionSansCours)),
+                () -> assertTrue(resultat.aucuneAlerte()));
+    }
+
+    @Test
+    void testDetecterVariationsBrutalesAvecV1EgalZeroMetsEnDonneesManquantes() {
+        Portefeuille portfolio = new Portefeuille();
+        ActionSimple action = new ActionSimple("Action zero");
+        action.enrgCours(JOUR_1, 0.0);
+        action.enrgCours(JOUR_2, 10.0);
+        portfolio.acheter(action, 1);
+
+        ResultatAlerteVariation resultat = portfolio.detecterVariationsBrutales(JOUR_1, JOUR_2, 10.0);
+
+        assertAll(
+                () -> assertTrue(resultat.getDonneesManquantes().contains(action)),
+                () -> assertTrue(resultat.aucuneAlerte()));
+    }
+
+    // --- Tests pour detecterActionsEnBaisse ---
+
+    @Test
+    void testDetecterActionsEnBaisseAvecJ1NullLeveException() {
+        Portefeuille portfolio = new Portefeuille();
+        assertThrows(NullPointerException.class,
+                () -> portfolio.detecterActionsEnBaisse(null, JOUR_2));
+    }
+
+    @Test
+    void testDetecterActionsEnBaisseAvecJ2NullLeveException() {
+        Portefeuille portfolio = new Portefeuille();
+        assertThrows(NullPointerException.class,
+                () -> portfolio.detecterActionsEnBaisse(JOUR_1, null));
+    }
+
+    @Test
+    void testDetecterActionsEnBaissePortefeuilleVideRetourneAucunePerte() {
+        Portefeuille portfolio = new Portefeuille();
+        ResultatDetectionBaisse resultat = portfolio.detecterActionsEnBaisse(JOUR_1, JOUR_2);
+        assertTrue(resultat.aucunePerte());
+    }
+
+    @Test
+    void testDetecterActionsEnBaisseActionEnBaisseDetectee() {
+        Portefeuille portfolio = new Portefeuille();
+        ActionSimple action = new ActionSimple("Action baisse");
+        action.enrgCours(JOUR_1, 100.0);
+        action.enrgCours(JOUR_2, 80.0);
+        portfolio.acheter(action, 1);
+
+        ResultatDetectionBaisse resultat = portfolio.detecterActionsEnBaisse(JOUR_1, JOUR_2);
+
+        assertAll(
+                () -> assertFalse(resultat.aucunePerte()),
+                () -> assertTrue(resultat.getActionsEnBaisse().containsKey(action)),
+                () -> assertEquals(-20.0, resultat.getActionsEnBaisse().get(action), 0.001));
+    }
+
+    @Test
+    void testDetecterActionsEnBaisseActionEnHausseNonDetectee() {
+        Portefeuille portfolio = new Portefeuille();
+        ActionSimple action = new ActionSimple("Action hausse");
+        action.enrgCours(JOUR_1, 80.0);
+        action.enrgCours(JOUR_2, 100.0);
+        portfolio.acheter(action, 1);
+
+        ResultatDetectionBaisse resultat = portfolio.detecterActionsEnBaisse(JOUR_1, JOUR_2);
+
+        assertTrue(resultat.aucunePerte());
+    }
+
+    @Test
+    void testDetecterActionsEnBaisseActionStableNonDetectee() {
+        Portefeuille portfolio = new Portefeuille();
+        ActionSimple action = new ActionSimple("Action stable");
+        action.enrgCours(JOUR_1, 100.0);
+        action.enrgCours(JOUR_2, 100.0);
+        portfolio.acheter(action, 1);
+
+        ResultatDetectionBaisse resultat = portfolio.detecterActionsEnBaisse(JOUR_1, JOUR_2);
+
+        assertTrue(resultat.aucunePerte());
+    }
+
+    @Test
+    void testDetecterActionsEnBaisseActionSansCoursEnDonneesManquantes() {
+        Portefeuille portfolio = new Portefeuille();
+        ActionSimple action = new ActionSimple("Sans cours");
+        portfolio.acheter(action, 1);
+
+        ResultatDetectionBaisse resultat = portfolio.detecterActionsEnBaisse(JOUR_1, JOUR_2);
+
+        assertAll(
+                () -> assertTrue(resultat.getDonneesManquantes().contains(action)),
+                () -> assertTrue(resultat.aucunePerte()));
+    }
 }

@@ -20,9 +20,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ActionComposeeTest {
 
@@ -209,6 +211,36 @@ class ActionComposeeTest {
         newComposition.put(action3, VALUE_UN);
 
         assertThrows(IllegalArgumentException.class, () -> actionComposee.editComposition(newComposition));
+    }
+
+    @Test
+    void testHasCoursReturnsTrueWhenAllActionsHaveCours() {
+        ActionSimple action1 = new ActionSimple(LIBELLE_UN);
+        ActionSimple action2 = new ActionSimple(LIBELLE_DEUX);
+        action1.enrgCours(JOUR_TEST, VALUE_UN);
+        action2.enrgCours(JOUR_TEST, VALUE_UN);
+
+        Map<ActionSimple, Double> localComposition = new HashMap<>();
+        localComposition.put(action1, VALUE_UN);
+        localComposition.put(action2, VALUE_UN);
+        ActionComposee actionComposee = new ActionComposee(LIBELLE_UN, localComposition);
+
+        assertTrue(actionComposee.hasCours(JOUR_TEST));
+    }
+
+    @Test
+    void testHasCoursReturnsFalseWhenOneActionHasNoCours() {
+        ActionSimple action1 = new ActionSimple(LIBELLE_UN);
+        ActionSimple action2 = new ActionSimple(LIBELLE_DEUX);
+        action1.enrgCours(JOUR_TEST, VALUE_UN);
+        // action2 n'a pas de cours enregistré
+
+        Map<ActionSimple, Double> localComposition = new HashMap<>();
+        localComposition.put(action1, VALUE_UN);
+        localComposition.put(action2, VALUE_UN);
+        ActionComposee actionComposee = new ActionComposee(LIBELLE_UN, localComposition);
+
+        assertFalse(actionComposee.hasCours(JOUR_TEST));
     }
 
 }
