@@ -77,6 +77,10 @@ public class Portefeuille {
             throw new IllegalArgumentException("La quantité à vendre doit être strictement positive");
         }
 
+        if (!this.actions.containsKey(action)) {
+            throw new IllegalArgumentException("Action absente du portefeuille");
+        }
+
         int quantiteActuelle = this.actions.getOrDefault(action, 0);
         if (quantiteActuelle < quantite) {
             throw new IllegalArgumentException("Quantité insuffisante dans le portefeuille pour effectuer la vente");

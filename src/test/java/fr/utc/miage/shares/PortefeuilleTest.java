@@ -324,4 +324,19 @@ class PortefeuilleTest {
                 () -> assertEquals(4, actions.get(action2), "La quantité pour A2 doit être de 4"),
                 () -> assertEquals(13, actions.get(action3), "La quantité pour A3 doit être de 13"));
     }
+
+    @Test
+    void testVendreUnownedActionShouldThrowException() {
+        // Given : Etant donné qu'un portefeuille ne contenant pas une action donnée
+        Portefeuille portfolio = new Portefeuille();
+        ActionSimple action = new ActionSimple(ACTION_1_NAME);
+        
+        // When & Then : Lorsque je tente de vendre cette action (Exemple: vente d'une action non détenue)
+        // Alors le système retourne une erreur indiquant que l'action n'est pas présente dans le portefeuille
+        IllegalArgumentException exception = assertThrows(
+            IllegalArgumentException.class, 
+            () -> portfolio.vendre(action, 1)
+        );
+        assertEquals("Action absente du portefeuille", exception.getMessage());
+    }
 }
