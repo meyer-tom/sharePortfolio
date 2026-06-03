@@ -56,10 +56,17 @@ class PortefeuilleTest {
         Portefeuille portfolio = new Portefeuille();
         ActionSimple action = new ActionSimple(ACTION_1_NAME);
         
-        assertAll("Vérification des quantités invalides à l'achat",
-            () -> assertThrows(IllegalArgumentException.class, () -> portfolio.acheter(action, 0)),
-            () -> assertThrows(IllegalArgumentException.class, () -> portfolio.acheter(action, -5))
+        IllegalArgumentException exceptionZero = assertThrows(
+            IllegalArgumentException.class, 
+            () -> portfolio.acheter(action, 0)
         );
+        assertEquals("La quantité à acheter doit être strictement positive", exceptionZero.getMessage());
+
+        IllegalArgumentException exceptionNegative = assertThrows(
+            IllegalArgumentException.class, 
+            () -> portfolio.acheter(action, -3)
+        );
+        assertEquals("La quantité à acheter doit être strictement positive", exceptionNegative.getMessage());
     }
 
      @Test
