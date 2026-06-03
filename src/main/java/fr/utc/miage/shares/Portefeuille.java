@@ -47,9 +47,10 @@ public class Portefeuille {
 
     /**
      * Ajoute une certaine quantité d'une action au portefeuille.
-     * @param action l'action à acheter
+     * 
+     * @param action   l'action à acheter
      * @param quantite la quantité à acheter (doit être > 0)
-     * @throws NullPointerException si l'action est null
+     * @throws NullPointerException     si l'action est null
      * @throws IllegalArgumentException si la quantité est inférieure ou égale à 0
      */
     public void acheter(final Action action, final int quantite) {
@@ -57,29 +58,30 @@ public class Portefeuille {
         if (quantite <= 0) {
             throw new IllegalArgumentException("La quantité à acheter doit être strictement positive");
         }
-        
+
         this.actions.put(action, this.actions.getOrDefault(action, 0) + quantite);
     }
 
     /**
      * Retire une certaine quantité d'une action du portefeuille.
      *
-     * @param action l'action à vendre
+     * @param action   l'action à vendre
      * @param quantite la quantité à vendre (doit être &gt; 0)
-     * @throws NullPointerException si l'action est null
-     * @throws IllegalArgumentException si la quantité est &lt;= 0 ou supérieure à la quantité détenue
+     * @throws NullPointerException     si l'action est null
+     * @throws IllegalArgumentException si la quantité est &lt;= 0 ou supérieure à
+     *                                  la quantité détenue
      */
     public void vendre(final Action action, final int quantite) {
         Objects.requireNonNull(action, "L'action ne peut pas être null");
         if (quantite <= 0) {
             throw new IllegalArgumentException("La quantité à vendre doit être strictement positive");
         }
-        
+
         int quantiteActuelle = this.actions.getOrDefault(action, 0);
         if (quantiteActuelle < quantite) {
             throw new IllegalArgumentException("Quantité insuffisante dans le portefeuille pour effectuer la vente");
         }
-        
+
         if (quantiteActuelle == quantite) {
             this.actions.remove(action);
         } else {

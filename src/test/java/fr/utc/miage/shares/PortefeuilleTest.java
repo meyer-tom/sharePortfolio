@@ -267,4 +267,21 @@ class PortefeuilleTest {
                 () -> assertFalse(resultat.getActionsEnBaisse().containsKey(actionD)),
                 () -> assertTrue(resultat.getDonneesManquantes().contains(actionD)));
     }
+    
+    void testGetActionsOnNonEmptyPortefeuilleShouldReturnMapWithActions() {
+        Portefeuille portfolio = new Portefeuille();
+        ActionSimple action1 = new ActionSimple(ACTION_1_NAME);
+        ActionSimple action2 = new ActionSimple(ACTION_2_NAME);
+
+        portfolio.acheter(action1, 10);
+        portfolio.acheter(action2, 5);
+
+        Map<Action, Integer> actions = portfolio.getActions();
+        assertAll("Vérification des actions dans le portefeuille",
+                () -> assertEquals(2, actions.size(), "Le portefeuille doit contenir 2 actions"),
+                () -> assertTrue(actions.containsKey(action1), "Le portefeuille doit contenir l'action 1"),
+                () -> assertTrue(actions.containsKey(action2), "Le portefeuille doit contenir l'action 2"),
+                () -> assertEquals(10, actions.get(action1), "La quantité de l'action 1 doit être 10"),
+                () -> assertEquals(5, actions.get(action2), "La quantité de l'action 2 doit être 5"));
+    }
 }
