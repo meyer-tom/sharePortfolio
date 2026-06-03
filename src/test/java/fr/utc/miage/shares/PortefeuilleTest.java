@@ -318,4 +318,95 @@ class PortefeuilleTest {
                 () -> assertEquals(4, actions.get(action2), "La quantité pour A2 doit être de 4"),
                 () -> assertEquals(13, actions.get(action3), "La quantité pour A3 doit être de 13"));
     }
+
+    // --- Tests pour detecterVariationsBrutales ---
+
+    @Test
+    void testDetecterVariationsBrutalesScenario1HausseDépasseSeuil() {
+        Portefeuille portfolio = new Portefeuille();
+        ActionSimple actionA = new ActionSimple("Action A");
+        actionA.enrgCours(JOUR_1, 100.0);
+        actionA.enrgCours(JOUR_2, 120.0);
+        portfolio.acheter(actionA, 1);
+
+        ResultatAlerteVariation resultat = portfolio.detecterVariationsBrutales(JOUR_1, JOUR_2, 10.0);
+
+        assertTrue(resultat.getActionsEnAlerte().containsKey(actionA),
+                "Une alerte doit être générée pour l'action A (hausse de 20% > seuil 10%)");
+    }
+
+    @Test
+    void testDetecterVariationsBrutalesScenario2BaisseDépasseSeuil() {
+        Portefeuille portfolio = new Portefeuille();
+        ActionSimple actionA = new ActionSimple("Action A");
+        actionA.enrgCours(JOUR_1, 100.0);
+        actionA.enrgCours(JOUR_2, 85.0);
+        portfolio.acheter(actionA, 1);
+
+        ResultatAlerteVariation resultat = portfolio.detecterVariationsBrutales(JOUR_1, JOUR_2, 10.0);
+
+        assertTrue(resultat.getActionsEnAlerte().containsKey(actionA),
+                "Une alerte doit être générée pour l'action A (baisse de 15% > seuil 10%)");
+    }
+
+    @Test
+    void testDetecterVariationsBrutalesScenario3VariationInférieureSeuil() {
+        Portefeuille portfolio = new Portefeuille();
+        ActionSimple actionA = new ActionSimple("Action A");
+        actionA.enrgCours(JOUR_1, 100.0);
+        actionA.enrgCours(JOUR_2, 105.0);
+        portfolio.acheter(actionA, 1);
+
+        ResultatAlerteVariation resultat = portfolio.detecterVariationsBrutales(JOUR_1, JOUR_2, 10.0);
+
+        assertAll("Aucune alerte ne doit être générée (variation 5% < seuil 10%)",
+                () -> assertFalse(resultat.getActionsEnAlerte().containsKey(actionA)),
+                () -> assertTrue(resultat.aucuneAlerte()));
+    }
+
+    @Test
+    void testDetecterVariationsBrutalesScenario4VariationEgaleSeuil() {
+        Portefeuille portfolio = new Portefeuille();
+        ActionSimple actionA = new ActionSimple("Action A");
+        actionA.enrgCours(JOUR_1, 100.0);
+        actionA.enrgCours(JOUR_2, 110.0);
+        portfolio.acheter(actionA, 1);
+
+        ResultatAlerteVariation resultat = portfolio.detecterVariationsBrutales(JOUR_1, JOUR_2, 10.0);
+
+        assertAll("Une alerte doit être générée (variation 10% = seuil 10%)",
+                () -> assertTrue(resultat.getActionsEnAlerte().containsKey(actionA)),
+                () -> assertEquals(10.0, resultat.getActionsEnAlerte().get(actionA), 0.001));
+    }
+
+    @Test
+    void testDetecterVariationsBrutalesScenario5PlusieursActionsPortefeuille() {
+        Portefeuille portfolio = new Portefeuille();
+
+        ActionSimple actionA = new ActionSimple("Action A");
+        actionA.enrgCours(JOUR_1, 100.0);
+        actionA.enrgCours(JOUR_2, 120.0);
+
+        ActionSimple actionB = new ActionSimple("Action B");
+        actionB.enrgCours(JOUR_1, 200.0);
+        actionB.enrgCours(JOUR_2, 170.0);
+
+        ActionSimple actionC = new ActionSimple("Action C");
+        actionC.enrgCours(JOUR_1, 50.0);
+        actionC.enrgCours(JOUR_2, 52.0);
+
+        portfolio.acheter(actionA, 1);
+        portfolio.acheter(actionB, 1);
+        portfolio.acheter(actionC, 1);
+
+        ResultatAlerteVariation resultat = portfolio.detecterVariationsBrutales(JOUR_1, JOUR_2, 10.0);
+
+        assertAll("Les alertes doivent être générées uniquement pour A et B",
+                () -> assertTrue(resultat.getActionsEnAlerte().containsKey(actionA),
+                        "Alerte attendue pour l'action A (hausse 20%)"),
+                () -> assertTrue(resultat.getActionsEnAlerte().containsKey(actionB),
+                        "Alerte attendue pour l'action B (baisse 15%)"),
+                () -> assertFalse(resultat.getActionsEnAlerte().containsKey(actionC),
+                        "Aucune alerte pour l'action C (variation 4%)"));
+    }
 }
