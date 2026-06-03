@@ -39,7 +39,7 @@ public class ActionSimple extends Action {
     public ActionSimple(final String libelle) {
         // Action simple initialisée comme 1 action
         super(libelle);
-        if(libelle == null || libelle.equals("")){
+        if (libelle == null || libelle.equals("")) {
             throw new IllegalArgumentException("le libele est null");
         }
         // init spécifique
@@ -47,7 +47,8 @@ public class ActionSimple extends Action {
     }
 
     /**
-     * Enregistre le cours de l'action pour un jour donné, uniquement si aucun cours n'existe déjà pour ce jour.
+     * Enregistre le cours de l'action pour un jour donné, uniquement si aucun cours
+     * n'existe déjà pour ce jour.
      *
      * @param j le jour concerné
      * @param v la valeur du cours à enregistrer
