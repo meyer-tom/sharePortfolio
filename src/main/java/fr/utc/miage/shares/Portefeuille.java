@@ -103,8 +103,4 @@ public class Portefeuille {
         }
         return somme;
     }
-
-    public Map<Action, Integer> consulterPortefeuille() {
-        return new HashMap<>(actions);
-    }
 }
