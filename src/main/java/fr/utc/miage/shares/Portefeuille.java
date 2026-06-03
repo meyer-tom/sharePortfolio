@@ -135,6 +135,10 @@ public class Portefeuille {
             } else {
                 double v1 = action.valeur(j1);
                 double v2 = action.valeur(j2);
+                if (v1 == 0.0) {
+                    donneesManquantes.add(action);
+                    continue;
+                }
                 double variationPct = Math.abs((v2 - v1) / v1) * 100.0;
                 if (variationPct >= seuilPourcentage) {
                     actionsEnAlerte.put(action, variationPct);
