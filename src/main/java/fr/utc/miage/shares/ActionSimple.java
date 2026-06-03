@@ -30,7 +30,12 @@ public class ActionSimple extends Action {
     // attribut lien
     private final Map<Jour, Double> mapCours;
 
-    // constructeur
+    /**
+     * Construit une ActionSimple à partir de son libellé.
+     *
+     * @param libelle le nom de l'action simple
+     * @throws IllegalArgumentException si le libellé est null ou vide
+     */
     public ActionSimple(final String libelle) {
         // Action simple initialisée comme 1 action
         super(libelle);
@@ -41,7 +46,12 @@ public class ActionSimple extends Action {
         this.mapCours = new HashMap<>();
     }
 
-    // enrg possible si pas de cours pour ce jour
+    /**
+     * Enregistre le cours de l'action pour un jour donné, uniquement si aucun cours n'existe déjà pour ce jour.
+     *
+     * @param j le jour concerné
+     * @param v la valeur du cours à enregistrer
+     */
     public void enrgCours(final Jour j, final double v) {
         this.mapCours.putIfAbsent(j, v);
     }

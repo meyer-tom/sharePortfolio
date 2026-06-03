@@ -47,8 +47,8 @@ public abstract class Action {
     /**
      * Provides the value of the action object for a given day.
      *
-     * @param j
-     * @return
+     * @param j le jour pour lequel on veut la valeur de l'action
+     * @return la valeur de l'action pour le jour donné
      */
     public abstract double valeur(Jour j);
 
