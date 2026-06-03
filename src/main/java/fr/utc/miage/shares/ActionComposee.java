@@ -117,10 +117,5 @@ public class ActionComposee extends Action {
         }
         return total;
     }
-
-    @Override
-    public boolean hasCours(final Jour j) {
-        return composition.keySet().stream().allMatch(a -> a.hasCours(j));
-    }
-
+    
 }
