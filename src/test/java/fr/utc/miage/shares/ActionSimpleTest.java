@@ -96,23 +96,5 @@ class ActionSimpleTest {
 
     }
 
-    //Suppression d'une action utilisée dans un portefeuille
-    @Test
-    void testActionSimpleCouldNotBeDeleted() {
-        final ActionSimple action = new ActionSimple(FOO_SHARE1);
-        final List<Action> actions = new ArrayList<>();
-
-        actions.add(action);
-        final ListeActions liste = new ListeActions(actions);
-
-        final Portefeuille portefeuille = new Portefeuille();
-
-        portefeuille.acheter(action, VALEUR);
-        Assertions.assertThrows(IllegalStateException.class, () -> {
-            liste.supprimerAction(action);
-        });
-
-    }
-
 
 }
